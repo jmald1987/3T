@@ -17,8 +17,16 @@ function handleTurn(event) {
         return square === event.target;
         });
     board[idx] = turn;
-    // check your console logs to make sure it's working!
-    console.log(board);
+    // This is tidy
+    turn = turn === 'X' ? 'O' : 'X';
+    // In an if statement it would look like: 
+    // if (turn === 'X') {
+    // turn = 'O' 
+    // } else {
+    // turn = 'X' 
+    // };
+    // writing the ternary saved you from all that. 
+    render();
     };
 
 
