@@ -14,8 +14,12 @@ function init() {
     '', '', ''
     ];
     };
+    render();
     //be sure to call the init function!
     init();
 
 function render() {
+    board.forEach(function(mark, index){
+        console.log(mark, index);
+        });
     }
