@@ -11,42 +11,65 @@ const winningCombos = [
     [0, 4, 8],
     [2, 4, 6]
     ];
+
 /*----- app's state (variables) -----*/
+
 let board;
 let turn = 'X';
 let win;
-//win = board[0] && board[0] === board[1] && board[0] === board[2] ? board[0] : null;
+let x=0;
+let o=0;
+let boardID= document.getElementById('board');
+let winner = null;
+
 
 /*----- cached element references -----*/
+
 const squares = Array.from(document.querySelectorAll('#board div'));
-const messages = document.querySelector('h2');
 
 /*----- event listeners -----*/
-document.getElementById('board').addEventListener('click', handleTurn);
+boardID.addEventListener('click', handleTurn);
+const messages = document.querySelector('h2');
+document.getElementById('reset-button').addEventListener('click', init);
+
 
 /*----- functions -----*/
-function getWinner() {
-    // just stub it up for now.
-    }
 
-function handleTurn(event) {
+function getWinner() {
+    let winner = null;
+    winningCombos.forEach(function(combo, index) {
+        if (board[combo[0]] && board[combo[0]] === board[combo[1]] && board[combo[0]] === board[combo[2]]) 
+        winner = board[combo[0]];
+        });
+        if (winner==='X'){
+            x=x+1;
+            document.getElementById('x').innerHTML=`Score for x: ${x}`;
+            console.log(`Score for x: ${x}`);
+          
+        }
+    
+        if (winner=='O'){
+            o=o+1;
+            document.getElementById('o').innerHTML=`Score for o: ${o}`;
+            console.log(`Score for o: ${o}`);
+           
+            }
+    
+
+
+    
+        return winner ? winner : board.includes('') ? null : 'T';
+};
+
+function handleTurn() {
     let idx = squares.findIndex(function(square) {
         return square === event.target;
-        });
+    });
     board[idx] = turn;
-    // This is tidy
     turn = turn === 'X' ? 'O' : 'X';
-    // In an if statement it would look like: 
-    // if (turn === 'X') {
-    // turn = 'O' 
-    // } else {
-    // turn = 'X' 
-    // };
-    // writing the ternary saved you from all that. 
     win = getWinner();
     render();
-    };
-
+};
 
 function init() {
     board = [
@@ -54,31 +77,23 @@ function init() {
     '', '', '',
     '', '', ''
     ];
-    };
     render();
-    //be sure to call the init function!
-    init();
+    boardID.disabled=false;
+};
+
+
+
 
 function render() {
-    board.forEach(function(mark, index){
-        squares[index].textContent = mark;
-        });
-        messages.textContent = `It's ${turn}'s turn!`;
-    }
-    
-function getWinner() {
-    let winner = null;
-    winningCombos.forEach(function(combo, index) {
-        if (board[combo[0]] && board[combo[0]] === board[combo[1]] && board[combo[0]] === board[combo[2]]) 
-        winner = board[combo[0]];
-        });
-        if (winner) {
-            return winner 
-          } else if (board.includes('')) {
-            return null // if there's an empty space, return null (no winner yet)
-          } else {
-            return 'T' // no winner and no empty spaces? That's a tie!
-          }
-          messages.textContent = win === 'T' ? `That's a tie, queen!` : win ? `${win} wins the game!` : `It's ${turn}'s turn!`;
+    board.forEach(function(mark, index) {
+    //this moves the value of the board item into the squares[idx]
+    squares[index].textContent = mark;
+    });
 
-    };
+    messages.textContent = win === 'T' ? `That's a tie` : win ? `${win} wins the game!` : `It's ${turn}'s turn!`;
+
+};
+
+
+
+init();
